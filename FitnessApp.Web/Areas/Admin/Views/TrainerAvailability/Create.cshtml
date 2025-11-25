@@ -1,0 +1,44 @@
+@model FitnessApp.Web.Data.TrainerAvailability
+
+@{
+    ViewData["Title"] = "Yeni Saat Ekle";
+}
+
+<h1>Yeni Çalışma Saati Ekle</h1>
+<h4>@ViewBag.TrainerName</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TrainerId" />
+            
+            <div class="mb-3">
+                <label asp-for="DayOfWeek" class="form-label">Gün</label>
+                <select asp-for="DayOfWeek" class="form-select" asp-items="Html.GetEnumSelectList<DayOfWeek>()"></select>
+                <span asp-validation-for="DayOfWeek" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="StartTime" class="form-label">Başlangıç Saati</label>
+                <input asp-for="StartTime" class="form-control" type="time" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="EndTime" class="form-label">Bitiş Saati</label>
+                <input asp-for="EndTime" class="form-control" type="time" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <input type="submit" value="Ekle" class="btn btn-primary" />
+                <a asp-action="Index" asp-route-trainerId="@Model.TrainerId" class="btn btn-secondary">Geri Dön</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

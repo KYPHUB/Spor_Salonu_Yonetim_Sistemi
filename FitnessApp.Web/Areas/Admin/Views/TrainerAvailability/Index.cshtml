@@ -1,0 +1,37 @@
+@model IEnumerable<FitnessApp.Web.Data.TrainerAvailability>
+
+@{
+    ViewData["Title"] = "Çalışma Saatleri";
+}
+
+<h1>@ViewBag.TrainerName - Çalışma Saatleri</h1>
+
+<p>
+    <a asp-action="Create" asp-route-trainerId="@ViewBag.TrainerId" class="btn btn-primary">Yeni Saat Ekle</a>
+    <a asp-controller="Trainer" asp-action="Index" class="btn btn-secondary">Antrenörlere Dön</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Gün</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@item.DayOfWeek</td>
+            <td>@item.StartTime.ToString(@"hh\:mm")</td>
+            <td>@item.EndTime.ToString(@"hh\:mm")</td>
+            <td>
+                <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Sil</button>
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

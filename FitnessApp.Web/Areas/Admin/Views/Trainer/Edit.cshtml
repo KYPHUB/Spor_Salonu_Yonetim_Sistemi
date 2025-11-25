@@ -1,0 +1,69 @@
+@model FitnessApp.Web.Data.Trainer
+
+@{
+    ViewData["Title"] = "Antrenör Düzenle";
+    var services = ViewBag.Services as List<FitnessApp.Web.Data.Service>;
+}
+
+<h1>Antrenör Düzenle</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label">Ad Soyad</label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Bio" class="form-label">Biyografi</label>
+                <textarea asp-for="Bio" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Bio" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Mevcut Fotoğraf</label>
+                @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+                {
+                    <div class="mb-2">
+                        <img src="@Model.PhotoUrl" alt="Current Photo" style="width: 100px; border-radius: 5px;" />
+                    </div>
+                }
+                <input type="file" name="photoFile" class="form-control" accept="image/*" />
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Uzmanlık Alanları</label>
+                <div class="card p-2">
+                    @if (services != null)
+                    {
+                        foreach (var service in services)
+                        {
+                            var isChecked = Model.Specialties.Any(s => s.Id == service.Id) ? "checked" : "";
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="selectedServices" value="@service.Id" id="service_@service.Id" @isChecked>
+                                <label class="form-check-label" for="service_@service.Id">
+                                    @service.Name
+                                </label>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <input type="submit" value="Güncelle" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
