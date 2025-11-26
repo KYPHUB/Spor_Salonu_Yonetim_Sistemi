@@ -1,0 +1,52 @@
+@model IEnumerable<FitnessApp.Web.Data.Trainer>
+
+@{
+    ViewData["Title"] = "Antrenörlerimiz";
+}
+
+<div class="container py-5">
+    <h1 class="text-center mb-5">Uzman Antrenör Kadromuz</h1>
+    
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(item.PhotoUrl))
+                    {
+                        <img src="@item.PhotoUrl" class="card-img-top" alt="@item.FullName" style="height: 300px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 300px;">
+                            <span>Fotoğraf Yok</span>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@item.FullName</h5>
+                        
+                        <!-- Specialization Areas Display -->
+                        <div class="mb-3">
+                            @if (item.Specialties != null && item.Specialties.Any())
+                            {
+                                @foreach (var specialty in item.Specialties)
+                                {
+                                    <span class="badge bg-primary me-1">@specialty.Name</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted small">Uzmanlık alanı belirtilmemiş</span>
+                            }
+                        </div>
+
+                        <p class="card-text text-truncate">@item.Bio</p>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary w-100">Profili İncele</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

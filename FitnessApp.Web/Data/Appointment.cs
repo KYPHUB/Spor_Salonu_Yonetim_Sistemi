@@ -16,7 +16,10 @@ public class Appointment
     public Service Service { get; set; }
 
     public DateTime Date { get; set; }
-    public TimeSpan Time { get; set; }
+    public TimeSpan StartTime { get; set; }
+    public TimeSpan EndTime { get; set; }
+
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     public AppointmentStatus Status { get; set; } = AppointmentStatus.Pending;
 }
@@ -26,5 +29,6 @@ public enum AppointmentStatus
     Pending,
     Confirmed,
     Rejected,
-    Completed
+    Completed,
+    Cancelled
 }

@@ -1,0 +1,64 @@
+@model FitnessApp.Web.Data.Trainer
+
+@{
+    ViewData["Title"] = Model.FullName;
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+            {
+                <img src="@Model.PhotoUrl" class="img-fluid rounded shadow" alt="@Model.FullName">
+            }
+            else
+            {
+                <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded shadow" style="height: 400px;">
+                    <span>Fotoğraf Yok</span>
+                </div>
+            }
+        </div>
+        <div class="col-md-8">
+            <h1 class="display-4">@Model.FullName</h1>
+            
+            <div class="mb-4">
+                @foreach (var specialty in Model.Specialties)
+                {
+                    <span class="badge bg-primary fs-6 me-2">@specialty.Name</span>
+                }
+            </div>
+
+            <h3>Hakkında</h3>
+            <p class="lead">@Model.Bio</p>
+
+            <hr class="my-4">
+
+            <h3>Çalışma Saatleri</h3>
+            @if (Model.Availabilities != null && Model.Availabilities.Any())
+            {
+                <div class="row">
+                    @foreach (var availability in Model.Availabilities.OrderBy(a => a.DayOfWeek).ThenBy(a => a.StartTime))
+                    {
+                        <div class="col-md-6 mb-2">
+                            <div class="card border-light bg-light">
+                                <div class="card-body py-2">
+                                    <strong>@availability.DayOfWeek:</strong> 
+                                    @availability.StartTime.ToString(@"hh\:mm") - @availability.EndTime.ToString(@"hh\:mm")
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">Çalışma saati bilgisi bulunmamaktadır.</p>
+            }
+
+            <div class="mt-5">
+                <a asp-controller="Appointment" asp-action="Create" asp-route-trainerId="@Model.Id" asp-route-serviceId="1" class="btn btn-success btn-lg me-2">Randevu Al</a>
+                <a asp-controller="Trainers" asp-action="Index" class="btn btn-secondary btn-lg">Listeye Dön</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using FitnessApp.Web.Data;
+using FitnessApp.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
@@ -23,6 +23,7 @@ builder.Services.AddIdentity<FitnessApp.Web.Data.AppUser, Microsoft.AspNetCore.I
     .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<AppointmentService>();
 
 var app = builder.Build();
 

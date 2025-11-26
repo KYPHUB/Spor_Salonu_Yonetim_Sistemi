@@ -1,0 +1,94 @@
+@model FitnessApp.Web.ViewModels.AppointmentViewModel
+
+@{
+    ViewData["Title"] = "Randevu Al";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Randevu Oluştur</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>Hizmet:</strong> @Model.ServiceName (@Model.ServiceDuration dk) - @Model.ServicePrice.ToString("C2")<br />
+                        <strong>Antrenör:</strong> @Model.TrainerName
+                    </div>
+
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="TrainerId" />
+                        <input type="hidden" asp-for="ServiceId" />
+                        <input type="hidden" asp-for="ServiceDuration" />
+                        <input type="hidden" asp-for="TrainerName" />
+                        <input type="hidden" asp-for="ServiceName" />
+                        <input type="hidden" asp-for="ServicePrice" />
+
+                        <div class="mb-3">
+                            <label asp-for="Date" class="form-label">Tarih Seçiniz</label>
+                            <input asp-for="Date" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" id="appointmentDate" />
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="StartTime" class="form-label">Saat Seçiniz</label>
+                            <select asp-for="StartTime" class="form-select" id="timeSlots" disabled>
+                                <option value="">Önce tarih seçiniz</option>
+                            </select>
+                            <span asp-validation-for="StartTime" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg" id="btnSubmit" disabled>Randevuyu Onayla</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            var trainerId = @Model.TrainerId;
+            var duration = @Model.ServiceDuration;
+
+            $('#appointmentDate').change(function () {
+                var selectedDate = $(this).val();
+                if (selectedDate) {
+                    loadSlots(selectedDate);
+                }
+            });
+
+            // Sayfa yüklendiğinde tarih seçiliyse slotları yükle
+            var initialDate = $('#appointmentDate').val();
+            if (initialDate) {
+                loadSlots(initialDate);
+            }
+
+            function loadSlots(date) {
+                $('#timeSlots').prop('disabled', true).html('<option>Yükleniyor...</option>');
+                
+                $.get('/Appointment/GetAvailableSlots', { trainerId: trainerId, date: date, durationMinutes: duration }, function (data) {
+                    var options = '<option value="">Saat seçiniz</option>';
+                    if (data.length === 0) {
+                        options = '<option value="">Uygun saat yok</option>';
+                    } else {
+                        $.each(data, function (index, value) {
+                            options += '<option value="' + value + '">' + value + '</option>';
+                        });
+                    }
+                    $('#timeSlots').html(options).prop('disabled', data.length === 0);
+                });
+            }
+
+            $('#timeSlots').change(function() {
+                $('#btnSubmit').prop('disabled', $(this).val() === "");
+            });
+        });
+    </script>
+}

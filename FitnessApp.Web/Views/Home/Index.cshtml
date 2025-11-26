@@ -1,8 +1,46 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Hero Section -->
+<div class="bg-dark text-white py-5 mb-5" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80'); background-size: cover; background-position: center;">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-3 fw-bold mb-3">Hayalindeki Vücuda Kavuş</h1>
+                <p class="lead mb-4">Profesyonel antrenörler ve modern ekipmanlarla hedeflerine ulaşman için yanındayız.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a asp-controller="Trainers" asp-action="Index" class="btn btn-primary btn-lg px-4 me-md-2">Antrenörleri İncele</a>
+                    <a asp-controller="Services" asp-action="Index" class="btn btn-outline-light btn-lg px-4">Hizmetlerimiz</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container mb-5">
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+        <div class="col">
+            <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-gradient text-white fs-2 mb-3 rounded-3" style="width: 64px; height: 64px;">
+                <i class="bi bi-people"></i>
+            </div>
+            <h3 class="fs-2">Uzman Kadro</h3>
+            <p>Alanında uzman sertifikalı antrenörlerimizle güvenli ve etkili antrenman yapın.</p>
+        </div>
+        <div class="col">
+            <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-gradient text-white fs-2 mb-3 rounded-3" style="width: 64px; height: 64px;">
+                <i class="bi bi-geo-alt"></i>
+            </div>
+            <h3 class="fs-2">Modern Salonlar</h3>
+            <p>Son teknoloji ekipmanlarla donatılmış ferah ve hijyenik salonlarımızda sporun keyfini çıkarın.</p>
+        </div>
+        <div class="col">
+            <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-gradient text-white fs-2 mb-3 rounded-3" style="width: 64px; height: 64px;">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+            <h3 class="fs-2">Kolay Randevu</h3>
+            <p>Online randevu sistemimizle dilediğiniz antrenörden size uygun saatte randevu alın.</p>
+        </div>
+    </div>
 </div>
