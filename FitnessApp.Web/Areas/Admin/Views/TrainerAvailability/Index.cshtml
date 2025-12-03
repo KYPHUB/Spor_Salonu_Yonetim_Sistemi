@@ -8,6 +8,9 @@
 
 <p>
     <a asp-action="Create" asp-route-trainerId="@ViewBag.TrainerId" class="btn btn-primary">Yeni Saat Ekle</a>
+    <form asp-action="AddDefaultSchedule" asp-route-trainerId="@ViewBag.TrainerId" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-info text-white">Varsayılan Program Ekle (09-17)</button>
+    </form>
     <a asp-controller="Trainer" asp-action="Index" class="btn btn-secondary">Antrenörlere Dön</a>
 </p>
 

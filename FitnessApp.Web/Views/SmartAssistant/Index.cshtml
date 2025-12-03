@@ -1,0 +1,76 @@
+@model FitnessApp.Web.ViewModels.UserStatsViewModel
+
+@{
+    ViewData["Title"] = "Akıllı Asistan";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">🤖 Yapay Zeka Fitness Asistanı</h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Vücut ölçülerinizi ve hedefinizi girin, size özel beslenme ve antrenman programı oluşturalım.</p>
+                    
+                    <form asp-action="Generate" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Age" class="form-label">Yaş</label>
+                                <input asp-for="Age" class="form-control" type="number" data-val="false" />
+                                <span asp-validation-for="Age" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Gender" class="form-label">Cinsiyet</label>
+                                <select asp-for="Gender" class="form-select">
+                                    <option value="Erkek">Erkek</option>
+                                    <option value="Kadın">Kadın</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Weight" class="form-label">Kilo (kg)</label>
+                                <input asp-for="Weight" class="form-control" type="text" placeholder="Örn: 80,5" data-val="false" />
+                                <span asp-validation-for="Weight" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Height" class="form-label">Boy (cm)</label>
+                                <input asp-for="Height" class="form-control" type="text" placeholder="Örn: 180" data-val="false" />
+                                <span asp-validation-for="Height" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Goal" class="form-label">Hedefiniz</label>
+                            <select asp-for="Goal" class="form-select">
+                                <option value="Kilo Verme">Kilo Verme (Yağ Yakımı)</option>
+                                <option value="Kas Kazanma">Kas Kazanma (Hacim)</option>
+                                <option value="Form Koruma">Form Koruma</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ActivityLevel" class="form-label">Aktivite Seviyesi</label>
+                            <select asp-for="ActivityLevel" class="form-select">
+                                <option value="Düşük">Düşük (Hareketsiz)</option>
+                                <option value="Orta">Orta (Haftada 1-3 gün spor)</option>
+                                <option value="Yüksek">Yüksek (Haftada 4+ gün spor)</option>
+                            </select>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-info btn-lg text-white">Plan Oluştur ✨</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

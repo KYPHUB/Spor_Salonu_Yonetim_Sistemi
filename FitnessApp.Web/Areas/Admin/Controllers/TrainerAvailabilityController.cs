@@ -54,11 +54,25 @@ public class TrainerAvailabilityController : Controller
         ModelState.Remove("Trainer");
         if (ModelState.IsValid)
         {
-            // Basit çakışma kontrolü (opsiyonel ama iyi olur)
-            // Şimdilik direkt ekleyelim
-            _context.Add(availability);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new { trainerId = availability.TrainerId });
+            // Çakışma Kontrolü
+            bool isOverlap = await _context.TrainerAvailabilities.AnyAsync(a => 
+                a.TrainerId == availability.TrainerId && 
+                a.DayOfWeek == availability.DayOfWeek &&
+                ((availability.StartTime >= a.StartTime && availability.StartTime < a.EndTime) ||
+                 (availability.EndTime > a.StartTime && availability.EndTime <= a.EndTime) ||
+                 (availability.StartTime <= a.StartTime && availability.EndTime >= a.EndTime))
+            );
+
+            if (isOverlap)
+            {
+                ModelState.AddModelError("", "Bu gün ve saat aralığında zaten bir çalışma saati tanımlı.");
+            }
+            else
+            {
+                _context.Add(availability);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { trainerId = availability.TrainerId });
+            }
         }
         
         var trainer = await _context.Trainers.FindAsync(availability.TrainerId);
@@ -81,5 +95,38 @@ public class TrainerAvailabilityController : Controller
             return RedirectToAction(nameof(Index), new { trainerId = trainerId });
         }
         return NotFound();
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddDefaultSchedule(int trainerId)
+    {
+        var trainer = await _context.Trainers.FindAsync(trainerId);
+        if (trainer == null) return NotFound();
+
+        // Hafta içi her gün 09:00 - 17:00
+        var days = new[] { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday };
+        var startTime = new TimeSpan(9, 0, 0);
+        var endTime = new TimeSpan(17, 0, 0);
+
+        foreach (var day in days)
+        {
+            // Çakışma yoksa ekle
+            bool exists = await _context.TrainerAvailabilities.AnyAsync(a => 
+                a.TrainerId == trainerId && a.DayOfWeek == day);
+            
+            if (!exists)
+            {
+                _context.TrainerAvailabilities.Add(new TrainerAvailability
+                {
+                    TrainerId = trainerId,
+                    DayOfWeek = day,
+                    StartTime = startTime,
+                    EndTime = endTime
+                });
+            }
+        }
+
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index), new { trainerId = trainerId });
     }
 }

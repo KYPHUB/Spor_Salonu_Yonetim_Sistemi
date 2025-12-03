@@ -6,31 +6,44 @@
     <h1 class="display-4">Admin Paneline Hoşgeldiniz</h1>
     <p>Buradan salonları, hizmetleri ve antrenörleri yönetebilirsiniz.</p>
     
-    <div class="row mt-5">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Salon Yönetimi</h5>
-                    <p class="card-text">Spor salonlarını ekleyin, düzenleyin veya silin.</p>
+    <div class="row mt-5 g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-building text-primary" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Salon Yönetimi</h5>
+                    <p class="card-text text-muted">Spor salonlarını ekleyin, düzenleyin veya silin.</p>
                     <a asp-controller="Gym" asp-action="Index" class="btn btn-primary">Salonlara Git</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Hizmet Yönetimi</h5>
-                    <p class="card-text">Sunulan hizmetleri ve fiyatlarını yönetin.</p>
-                    <a asp-controller="Service" asp-action="Index" class="btn btn-primary">Hizmetlere Git</a>
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-gear text-success" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Hizmet Yönetimi</h5>
+                    <p class="card-text text-muted">Sunulan hizmetleri ve fiyatlarını yönetin.</p>
+                    <a asp-controller="Service" asp-action="Index" class="btn btn-success">Hizmetlere Git</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Antrenör Yönetimi</h5>
-                    <p class="card-text">Antrenörleri ve uzmanlık alanlarını yönetin.</p>
-                    <a asp-controller="Trainer" asp-action="Index" class="btn btn-primary">Antrenörlere Git</a>
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-person-badge text-info" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Antrenör Yönetimi</h5>
+                    <p class="card-text text-muted">Antrenörleri ve uzmanlık alanlarını yönetin.</p>
+                    <a asp-controller="Trainer" asp-action="Index" class="btn btn-info">Antrenörlere Git</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-calendar-check text-warning" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Randevu Yönetimi</h5>
+                    <p class="card-text text-muted">Bekleyen randevuları onaylayın veya reddedin.</p>
+                    <a asp-controller="Appointment" asp-action="Index" class="btn btn-warning">Randevulara Git</a>
                 </div>
             </div>
         </div>

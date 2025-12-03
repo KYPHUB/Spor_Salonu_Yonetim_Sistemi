@@ -2,45 +2,64 @@
     ViewData["Title"] = "Ana Sayfa";
 }
 
-<!-- Hero Section -->
-<div class="bg-dark text-white py-5 mb-5" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80'); background-size: cover; background-position: center;">
-    <div class="container py-5">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1 class="display-3 fw-bold mb-3">Hayalindeki Vücuda Kavuş</h1>
-                <p class="lead mb-4">Profesyonel antrenörler ve modern ekipmanlarla hedeflerine ulaşman için yanındayız.</p>
-                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                    <a asp-controller="Trainers" asp-action="Index" class="btn btn-primary btn-lg px-4 me-md-2">Antrenörleri İncele</a>
-                    <a asp-controller="Services" asp-action="Index" class="btn btn-outline-light btn-lg px-4">Hizmetlerimiz</a>
-                </div>
-            </div>
+<div class="hero-section text-center text-white d-flex align-items-center justify-content-center">
+    <div class="hero-overlay"></div>
+    
+    <div class="container position-relative" style="z-index: 2;">
+        <h1 class="display-2 fw-bold text-uppercase mb-3 animate-fade-in" style="font-family: 'Teko', sans-serif;">
+            Hayalindeki Vücuda <span class="text-warning">Kavuş</span>
+        </h1>
+        <p class="lead mb-5 fs-4 animate-slide-up text-light opacity-75" style="max-width: 700px; margin: 0 auto;">
+            Profesyonel antrenörler ve modern ekipmanlarla hedeflerine ulaşman için yanındayız. Şimdi başla, yarın teşekkür et.
+        </p>
+        
+        <div class="d-flex justify-content-center gap-3 animate-slide-up delay-1">
+            <a asp-controller="Trainers" asp-action="Index" class="btn btn-warning btn-lg px-5 py-3 fw-bold rounded-pill shadow-lg text-dark">
+                <i class="bi bi-lightning-fill"></i> Antrenörleri İncele
+            </a>
+            <a asp-controller="Services" asp-action="Index" class="btn btn-outline-light btn-lg px-5 py-3 fw-bold rounded-pill hover-scale">
+                Hizmetlerimiz
+            </a>
         </div>
     </div>
 </div>
 
-<!-- Features Section -->
-<div class="container mb-5">
-    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
-        <div class="col">
-            <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-gradient text-white fs-2 mb-3 rounded-3" style="width: 64px; height: 64px;">
-                <i class="bi bi-people"></i>
+<div class="container py-5 mt-4">
+    <div class="row text-center g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-effect p-4" style="background-color: var(--card-bg, #fff);">
+                <div class="card-body">
+                    <div class="icon-box bg-warning text-dark mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center shadow" style="width: 80px; height: 80px;">
+                        <i class="bi bi-people-fill fs-2"></i>
+                    </div>
+                    <h3 class="h4 fw-bold text-uppercase">Uzman Kadro</h3>
+                    <p class="text-muted">Alanında sertifikalı, tecrübeli antrenörlerle güvenli ve bilimsel antrenman deneyimi.</p>
+                </div>
             </div>
-            <h3 class="fs-2">Uzman Kadro</h3>
-            <p>Alanında uzman sertifikalı antrenörlerimizle güvenli ve etkili antrenman yapın.</p>
         </div>
-        <div class="col">
-            <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-gradient text-white fs-2 mb-3 rounded-3" style="width: 64px; height: 64px;">
-                <i class="bi bi-geo-alt"></i>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-effect p-4" style="background-color: var(--card-bg, #fff);">
+                <div class="card-body">
+                    <div class="icon-box bg-dark text-warning mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center shadow" style="width: 80px; height: 80px;">
+                        <i class="bi bi-trophy-fill fs-2"></i>
+                    </div>
+                    <h3 class="h4 fw-bold text-uppercase">Modern Salonlar</h3>
+                    <p class="text-muted">Son teknoloji ekipmanlarla donatılmış, ferah ve hijyenik salonlarda sporun keyfini çıkarın.</p>
+                </div>
             </div>
-            <h3 class="fs-2">Modern Salonlar</h3>
-            <p>Son teknoloji ekipmanlarla donatılmış ferah ve hijyenik salonlarımızda sporun keyfini çıkarın.</p>
         </div>
-        <div class="col">
-            <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-gradient text-white fs-2 mb-3 rounded-3" style="width: 64px; height: 64px;">
-                <i class="bi bi-calendar-check"></i>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-effect p-4" style="background-color: var(--card-bg, #fff);">
+                <div class="card-body">
+                    <div class="icon-box bg-warning text-dark mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center shadow" style="width: 80px; height: 80px;">
+                        <i class="bi bi-calendar-check-fill fs-2"></i>
+                    </div>
+                    <h3 class="h4 fw-bold text-uppercase">Kolay Randevu</h3>
+                    <p class="text-muted">Online randevu sistemimizle saniyeler içinde sana uygun saati seç ve yerini ayırt.</p>
+                </div>
             </div>
-            <h3 class="fs-2">Kolay Randevu</h3>
-            <p>Online randevu sistemimizle dilediğiniz antrenörden size uygun saatte randevu alın.</p>
         </div>
     </div>
 </div>

@@ -6,7 +6,7 @@ using FitnessApp.Web.Data;
 namespace FitnessApp.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin")]
+[Authorize(Policy = "AdminOnly")]
 public class GymController : Controller
 {
     private readonly ApplicationDbContext _context;

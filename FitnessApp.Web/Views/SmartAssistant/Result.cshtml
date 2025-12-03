@@ -1,0 +1,28 @@
+@model string
+
+@{
+    ViewData["Title"] = "Size Özel Plan";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow border-info">
+                <div class="card-header bg-white">
+                    <h2 class="text-info mb-0">✨ Size Özel Fitness Planı</h2>
+                </div>
+                <div class="card-body">
+                    <div class="markdown-content">
+                        @* Basit bir Markdown render işlemi için satır satır işleyebiliriz veya direkt basabiliriz *@
+                        @* Şimdilik pre-wrap ile düzgün görünmesini sağlayalım *@
+                        <div style="white-space: pre-wrap; font-family: sans-serif; line-height: 1.6;">@Model</div>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a asp-action="Index" class="btn btn-outline-secondary">Yeni Plan Oluştur</a>
+                    <a asp-controller="Member" asp-action="Index" class="btn btn-primary">Panele Dön</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

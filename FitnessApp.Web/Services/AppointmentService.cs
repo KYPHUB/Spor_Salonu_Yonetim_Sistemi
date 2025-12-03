@@ -31,7 +31,9 @@ public class AppointmentService
 
         // O günkü mevcut randevuları al
         var existingAppointments = await _context.Appointments
-            .Where(a => a.TrainerId == trainerId && a.Date.Date == date.Date && a.Status != AppointmentStatus.Cancelled)
+            .Where(a => a.TrainerId == trainerId && a.Date.Date == date.Date && 
+                        a.Status != AppointmentStatus.Cancelled && 
+                        a.Status != AppointmentStatus.Rejected)
             .ToListAsync();
 
         var slots = new List<TimeSpan>();

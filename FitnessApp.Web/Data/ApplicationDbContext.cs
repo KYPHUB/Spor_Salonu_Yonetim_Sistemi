@@ -23,5 +23,12 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
         builder.Entity<Service>()
             .Property(s => s.Price)
             .HasColumnType("decimal(18,2)");
+
+        // CRITICAL FIX: Configure Many-to-Many relationship between Trainer and Service
+        // This replaces the incorrect One-to-Many relationship from the original migration
+        builder.Entity<Trainer>()
+            .HasMany(t => t.Specialties)
+            .WithMany()
+            .UsingEntity(j => j.ToTable("ServiceTrainer"));
     }
 }

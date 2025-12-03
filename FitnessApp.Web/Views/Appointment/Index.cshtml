@@ -1,0 +1,68 @@
+@model IEnumerable<FitnessApp.Web.Data.Appointment>
+
+@{
+    ViewData["Title"] = "Randevularım";
+}
+
+<div class="container py-5">
+    <h2 class="mb-4">Randevularım</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Henüz bir randevunuz bulunmamaktadır. <a asp-controller="Trainers" asp-action="Index" class="alert-link">Hemen randevu alın!</a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm h-100 @(item.Status == FitnessApp.Web.Data.AppointmentStatus.Cancelled ? "border-secondary bg-light" : "border-primary")">
+                        <div class="card-header d-flex justify-content-between align-items-center @(item.Status == FitnessApp.Web.Data.AppointmentStatus.Cancelled ? "bg-secondary text-white" : "bg-primary text-white")">
+                            <h5 class="card-title mb-0">@item.Date.ToShortDateString()</h5>
+                            <span class="badge bg-light text-dark">@item.StartTime.ToString(@"hh\:mm")</span>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">@item.Service?.Name</h6>
+                            <p class="card-text">
+                                <strong>Antrenör:</strong> @item.Trainer?.FullName <br />
+                                <strong>Durum:</strong>
+                                @switch (item.Status)
+                                {
+                                    case FitnessApp.Web.Data.AppointmentStatus.Pending:
+                                        <span class="badge bg-warning text-dark">Onay Bekliyor</span>
+                                        break;
+                                    case FitnessApp.Web.Data.AppointmentStatus.Confirmed:
+                                        <span class="badge bg-success">Onaylandı</span>
+                                        break;
+                                    case FitnessApp.Web.Data.AppointmentStatus.Rejected:
+                                        <span class="badge bg-danger">Reddedildi</span>
+                                        break;
+                                    case FitnessApp.Web.Data.AppointmentStatus.Cancelled:
+                                        <span class="badge bg-secondary">İptal Edildi</span>
+                                        break;
+                                    case FitnessApp.Web.Data.AppointmentStatus.Completed:
+                                        <span class="badge bg-primary">Tamamlandı</span>
+                                        break;
+                                }
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            @if (item.Status == FitnessApp.Web.Data.AppointmentStatus.Pending || item.Status == FitnessApp.Web.Data.AppointmentStatus.Confirmed)
+                            {
+                                @if (item.Date >= DateTime.Today)
+                                {
+                                    <form asp-action="Cancel" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Randevuyu iptal etmek istediğinize emin misiniz?');">
+                                        <button type="submit" class="btn btn-outline-danger w-100">İptal Et</button>
+                                    </form>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

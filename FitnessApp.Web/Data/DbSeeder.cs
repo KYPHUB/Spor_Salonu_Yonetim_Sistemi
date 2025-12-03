@@ -10,9 +10,16 @@ public static class DbSeeder
         var userManager = service.GetService<UserManager<AppUser>>();
         var roleManager = service.GetService<RoleManager<IdentityRole>>();
 
-        // Rolleri tanımla
-        await roleManager.CreateAsync(new IdentityRole("Admin"));
-        await roleManager.CreateAsync(new IdentityRole("Member"));
+        // CRITICAL FIX: Check if roles exist before creating them
+        if (!await roleManager.RoleExistsAsync("Admin"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+        }
+        
+        if (!await roleManager.RoleExistsAsync("Member"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Member"));
+        }
 
         // Admin kullanıcısını oluştur
         var adminEmail = "ogrencinumarasi@sakarya.edu.tr";

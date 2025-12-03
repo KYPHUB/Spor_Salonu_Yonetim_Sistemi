@@ -40,7 +40,18 @@
                     </div>
                     <h3 class="card-title">Randevularım</h3>
                     <p class="card-text">Geçmiş ve gelecek randevularınızı görüntüleyin.</p>
-                    <a href="#" class="btn btn-success btn-lg mt-3 disabled">Görüntüle (Yakında)</a>
+                    <a asp-controller="Appointment" asp-action="Index" class="btn btn-success btn-lg mt-3">Görüntüle</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Assistant Card -->
+        <div class="col-md-12 mt-4">
+            <div class="card shadow-sm border-info">
+                <div class="card-body text-center py-4">
+                    <h3 class="card-title text-info">🤖 Yapay Zeka Asistanı</h3>
+                    <p class="card-text">Vücut tipinize ve hedeflerinize uygun kişiselleştirilmiş program oluşturun.</p>
+                    <a asp-controller="SmartAssistant" asp-action="Index" class="btn btn-info text-white btn-lg">Plan Oluştur</a>
                 </div>
             </div>
         </div>

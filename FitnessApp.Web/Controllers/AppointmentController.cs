@@ -95,4 +95,36 @@ public class AppointmentController : Controller
     {
         return View();
     }
+
+    public async Task<IActionResult> Index()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var appointments = await _context.Appointments
+            .Include(a => a.Trainer)
+            .Include(a => a.Service)
+            .Where(a => a.MemberId == userId)
+            .OrderByDescending(a => a.Date)
+            .ThenByDescending(a => a.StartTime)
+            .ToListAsync();
+        return View(appointments);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Cancel(int id)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var appointment = await _context.Appointments.FirstOrDefaultAsync(a => a.Id == id && a.MemberId == userId);
+
+        if (appointment != null)
+        {
+            // Sadece gelecekteki ve iptal edilmemiş randevular iptal edilebilir
+            if (appointment.Date >= DateTime.Today && appointment.Status != AppointmentStatus.Cancelled)
+            {
+                appointment.Status = AppointmentStatus.Cancelled;
+                await _context.SaveChangesAsync();
+            }
+        }
+        return RedirectToAction(nameof(Index));
+    }
 }

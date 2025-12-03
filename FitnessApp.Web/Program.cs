@@ -22,8 +22,22 @@ builder.Services.AddIdentity<FitnessApp.Web.Data.AppUser, Microsoft.AspNetCore.I
     .AddEntityFrameworkStores<FitnessApp.Web.Data.ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+    builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => 
+        policy.RequireAssertion(context => 
+            context.User.IsInRole("Admin") || 
+            (context.User.Identity?.Name?.Contains("sakarya.edu.tr") == true)
+        ));
+});
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<AppointmentService>();
+builder.Services.AddScoped<IAIService, OpenAIService>();
+
+// API Documentation
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -38,13 +52,27 @@ using (var scope = app.Services.CreateScope())
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-
     app.UseHsts();
+}
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
 
+var supportedCultures = new[] { "tr-TR" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("tr-TR")
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
+
+// CRITICAL FIX: Add authentication middleware BEFORE authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
