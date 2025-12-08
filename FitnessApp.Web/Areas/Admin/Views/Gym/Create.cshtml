@@ -1,41 +1,73 @@
-@model FitnessApp.Web.Data.Gym
+@model FitnessApp.Web.Data.Service
 
 @{
-    ViewData["Title"] = "Yeni Salon Ekle";
+    ViewData["Title"] = "Yeni Hizmet Ekle";
 }
 
-<h1>Yeni Salon Ekle</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-dark text-white text-center py-4">
+                    <h3 class="fw-bold text-uppercase mb-0" style="font-family: 'Teko', sans-serif;">
+                        <i class="bi bi-file-earmark-plus me-2 text-warning"></i> Yeni Hizmet Oluştur
+                    </h3>
+                </div>
+                
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="Name" class="form-label text-secondary small fw-bold text-uppercase">Hizmet Adı</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-card-heading text-warning"></i></span>
+                                <input asp-for="Name" class="form-control bg-light border-start-0" placeholder="Örn: Pilates" />
+                            </div>
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="mb-3">
-                <label asp-for="Name" class="form-label">Salon Adı</label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="Description" class="form-label text-secondary small fw-bold text-uppercase">Açıklama</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-text-paragraph text-warning"></i></span>
+                                <textarea asp-for="Description" class="form-control bg-light border-start-0" rows="3" placeholder="Hizmet hakkında kısa bilgi..."></textarea>
+                            </div>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="DurationMinutes" class="form-label text-secondary small fw-bold text-uppercase">Süre (Dakika)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-stopwatch text-warning"></i></span>
+                                    <input asp-for="DurationMinutes" class="form-control bg-light border-start-0" placeholder="60" type="number" />
+                                </div>
+                                <span asp-validation-for="DurationMinutes" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Price" class="form-label text-secondary small fw-bold text-uppercase">Ücret (TL)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-currency-lira text-success"></i></span>
+                                    <input asp-for="Price" class="form-control bg-light border-start-0" placeholder="0.00" type="number" step="0.01" />
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-warning btn-lg fw-bold text-dark rounded-pill shadow-sm hover-scale">
+                                <i class="bi bi-check-circle-fill me-2"></i> KAYDET
+                            </button>
+                            <a asp-action="Index" class="btn btn-light btn-lg fw-bold text-secondary rounded-pill border hover-scale text-center text-decoration-none">
+                                <i class="bi bi-arrow-left me-2"></i> Listeye Dön
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-                <label asp-for="Address" class="form-label">Adres</label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Phone" class="form-label">Telefon</label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="OpeningHours" class="form-label">Çalışma Saatleri</label>
-                <input asp-for="OpeningHours" class="form-control" placeholder="09:00 - 22:00" />
-                <span asp-validation-for="OpeningHours" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <input type="submit" value="Kaydet" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 

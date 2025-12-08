@@ -36,7 +36,7 @@ main {
 }
 
 .nav-link:hover {
-  color: var(--primary-color) !important;
+  color: #ffca2c !important;
 }
 
 /* HERO SECTION (Ana Sayfa Görseli) */
@@ -93,6 +93,11 @@ main {
 .card p.text-muted {
   color: #6c757d !important;
   /* Açıklamalar gri */
+}
+
+/* BUTONLAR */
+.btn {
+  border-radius: 6px;
 }
 
 /* İKON KUTULARI */
