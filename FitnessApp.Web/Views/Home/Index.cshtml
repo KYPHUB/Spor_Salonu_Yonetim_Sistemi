@@ -63,3 +63,76 @@
         </div>
     </div>
 </div>
+
+<!-- İstatistik Bölümü -->
+<div class="bg-dark py-5 mt-4">
+    <div class="container">
+        <div class="row text-center text-white g-4">
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <i class="bi bi-people-fill text-warning fs-1 mb-2"></i>
+                    <h2 class="fw-bold mb-0 counter" data-target="50">0</h2>
+                    <p class="text-muted mb-0">Aktif Üye</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <i class="bi bi-person-badge text-warning fs-1 mb-2"></i>
+                    <h2 class="fw-bold mb-0 counter" data-target="10">0</h2>
+                    <p class="text-muted mb-0">Uzman Antrenör</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <i class="bi bi-stars text-warning fs-1 mb-2"></i>
+                    <h2 class="fw-bold mb-0 counter" data-target="15">0</h2>
+                    <p class="text-muted mb-0">Farklı Hizmet</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <i class="bi bi-emoji-smile text-warning fs-1 mb-2"></i>
+                    <h2 class="fw-bold mb-0 counter" data-target="98">0</h2>
+                    <p class="text-muted mb-0">% Memnuniyet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Animated counter
+        const counters = document.querySelectorAll('.counter');
+        const speed = 100;
+        
+        const animateCounter = (counter) => {
+            const target = +counter.getAttribute('data-target');
+            const inc = target / speed;
+            let count = 0;
+            
+            const updateCount = () => {
+                if (count < target) {
+                    count += inc;
+                    counter.innerText = Math.ceil(count);
+                    setTimeout(updateCount, 20);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            updateCount();
+        };
+        
+        // Intersection Observer for scroll animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    counters.forEach(counter => animateCounter(counter));
+                    observer.disconnect();
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        counters.forEach(counter => observer.observe(counter));
+    </script>
+}

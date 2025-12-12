@@ -77,9 +77,46 @@
         </div>
     </footer>
     
+    <!-- Back to Top Button -->
+    <button type="button" id="backToTop" class="btn btn-warning position-fixed bottom-0 end-0 m-4" style="display: none; z-index: 1000; border-radius: 50%; width: 50px; height: 50px;">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <!-- Loading Spinner Overlay -->
+    <div id="loadingSpinner" class="position-fixed top-0 start-0 w-100 h-100 d-none justify-content-center align-items-center" style="background: rgba(0,0,0,0.5); z-index: 9999;">
+        <div class="spinner-border text-warning" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Yükleniyor...</span>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <!-- Back to Top Script -->
+    <script>
+        $(document).ready(function() {
+            // Back to top button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 300) {
+                    $('#backToTop').fadeIn();
+                } else {
+                    $('#backToTop').fadeOut();
+                }
+            });
+            $('#backToTop').click(function() {
+                $('html, body').animate({scrollTop: 0}, 500);
+                return false;
+            });
+        });
+        
+        // Show loading on form submit
+        function showLoading() {
+            document.getElementById('loadingSpinner').classList.remove('d-none');
+            document.getElementById('loadingSpinner').classList.add('d-flex');
+        }
+    </script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
