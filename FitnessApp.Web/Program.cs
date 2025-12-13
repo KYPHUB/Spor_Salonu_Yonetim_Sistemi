@@ -33,7 +33,7 @@ builder.Services.AddIdentity<FitnessApp.Web.Data.AppUser, Microsoft.AspNetCore.I
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<AppointmentService>();
-builder.Services.AddScoped<IAIService, OpenAIService>();
+builder.Services.AddScoped<IAIService, GeminiService>();
 
 // API Documentation
 builder.Services.AddEndpointsApiExplorer();
