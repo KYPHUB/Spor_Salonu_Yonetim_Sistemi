@@ -1,7 +1,7 @@
-@model FitnessApp.Web.Data.Service
+@model FitnessApp.Web.Data.Gym
 
 @{
-    ViewData["Title"] = "Yeni Hizmet Ekle";
+    ViewData["Title"] = "Yeni Salon Ekle";
 }
 
 <div class="container py-5">
@@ -10,7 +10,7 @@
             <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
                 <div class="card-header bg-dark text-white text-center py-4">
                     <h3 class="fw-bold text-uppercase mb-0" style="font-family: 'Teko', sans-serif;">
-                        <i class="bi bi-file-earmark-plus me-2 text-warning"></i> Yeni Hizmet Oluştur
+                        <i class="bi bi-building me-2 text-warning"></i> Yeni Salon Ekle
                     </h3>
                 </div>
                 
@@ -19,41 +19,39 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
                         
                         <div class="mb-4">
-                            <label asp-for="Name" class="form-label text-secondary small fw-bold text-uppercase">Hizmet Adı</label>
+                            <label asp-for="Name" class="form-label text-secondary small fw-bold text-uppercase">Salon Adı</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-card-heading text-warning"></i></span>
-                                <input asp-for="Name" class="form-control bg-light border-start-0" placeholder="Örn: Pilates" />
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-building text-warning"></i></span>
+                                <input asp-for="Name" class="form-control bg-light border-start-0" placeholder="Örn: SAU Fitness Center" />
                             </div>
                             <span asp-validation-for="Name" class="text-danger small"></span>
                         </div>
 
                         <div class="mb-4">
-                            <label asp-for="Description" class="form-label text-secondary small fw-bold text-uppercase">Açıklama</label>
+                            <label asp-for="Address" class="form-label text-secondary small fw-bold text-uppercase">Adres</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-text-paragraph text-warning"></i></span>
-                                <textarea asp-for="Description" class="form-control bg-light border-start-0" rows="3" placeholder="Hizmet hakkında kısa bilgi..."></textarea>
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-warning"></i></span>
+                                <textarea asp-for="Address" class="form-control bg-light border-start-0" rows="2" placeholder="Tam adres..."></textarea>
                             </div>
-                            <span asp-validation-for="Description" class="text-danger small"></span>
+                            <span asp-validation-for="Address" class="text-danger small"></span>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <label asp-for="DurationMinutes" class="form-label text-secondary small fw-bold text-uppercase">Süre (Dakika)</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-stopwatch text-warning"></i></span>
-                                    <input asp-for="DurationMinutes" class="form-control bg-light border-start-0" placeholder="60" type="number" />
-                                </div>
-                                <span asp-validation-for="DurationMinutes" class="text-danger small"></span>
+                        <div class="mb-4">
+                            <label asp-for="Phone" class="form-label text-secondary small fw-bold text-uppercase">Telefon</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-telephone text-warning"></i></span>
+                                <input asp-for="Phone" class="form-control bg-light border-start-0" placeholder="0555 123 4567" />
                             </div>
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
 
-                            <div class="col-md-6 mb-4">
-                                <label asp-for="Price" class="form-label text-secondary small fw-bold text-uppercase">Ücret (TL)</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-currency-lira text-success"></i></span>
-                                    <input asp-for="Price" class="form-control bg-light border-start-0" placeholder="0.00" type="number" step="0.01" />
-                                </div>
-                                <span asp-validation-for="Price" class="text-danger small"></span>
+                        <div class="mb-4">
+                            <label asp-for="OpeningHours" class="form-label text-secondary small fw-bold text-uppercase">Çalışma Saatleri</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-clock text-warning"></i></span>
+                                <input asp-for="OpeningHours" class="form-control bg-light border-start-0" placeholder="Örn: 08:00 - 22:00" />
                             </div>
+                            <span asp-validation-for="OpeningHours" class="text-danger small"></span>
                         </div>
 
                         <div class="d-grid gap-2 mt-4">
