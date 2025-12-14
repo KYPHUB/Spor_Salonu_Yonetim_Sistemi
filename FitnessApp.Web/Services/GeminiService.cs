@@ -19,12 +19,6 @@ public class GeminiService : IAIService
 
     public async Task<string> GeneratePlanAsync(UserStatsViewModel stats)
     {
-        // Debug: API key durumunu logla
-        _logger.LogInformation("API Key durumu: {KeyStatus}", 
-            string.IsNullOrEmpty(_apiKey) ? "BOŞ" : 
-            _apiKey == "YOUR_GEMINI_API_KEY_HERE" ? "PLACEHOLDER" : 
-            $"YÜKLÜ ({_apiKey.Substring(0, 10)}...)");
-
         // Eğer API Key yoksa veya varsayılan değerse Mock data dön
         if (string.IsNullOrEmpty(_apiKey) || _apiKey == "YOUR_GEMINI_API_KEY_HERE")
         {
@@ -32,13 +26,9 @@ public class GeminiService : IAIService
             return GenerateMockPlan(stats);
         }
 
-        _logger.LogInformation("Gemini API çağrılıyor...");
-        
         try
         {
-            var result = await CallGeminiApiAsync(stats);
-            _logger.LogInformation("Gemini API başarılı! Yanıt uzunluğu: {Length} karakter", result.Length);
-            return result;
+            return await CallGeminiApiAsync(stats);
         }
         catch (Exception ex)
         {
@@ -89,7 +79,7 @@ Yanıtı Markdown formatında ver.";
         var json = JsonSerializer.Serialize(requestBody);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={_apiKey}";
+        var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={_apiKey}";
         
         var response = await _httpClient.PostAsync(url, content);
         var responseBody = await response.Content.ReadAsStringAsync();
