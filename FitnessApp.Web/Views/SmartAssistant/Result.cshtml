@@ -4,6 +4,8 @@
     ViewData["Title"] = "Size Özel Plan";
 }
 
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
@@ -12,11 +14,13 @@
                     <h2 class="text-info mb-0">✨ Size Özel Fitness Planı</h2>
                 </div>
                 <div class="card-body">
-                    <div class="markdown-content">
-                        @* Basit bir Markdown render işlemi için satır satır işleyebiliriz veya direkt basabiliriz *@
-                        @* Şimdilik pre-wrap ile düzgün görünmesini sağlayalım *@
-                        <div style="white-space: pre-wrap; font-family: sans-serif; line-height: 1.6;">@Model</div>
+                    
+                    <div id="rawContent" style="display:none;">@Model</div>
+
+                    <div id="markdownResult" style="line-height: 1.8;">
+                        <div class="text-center text-muted">Plan yükleniyor...</div>
                     </div>
+
                 </div>
                 <div class="card-footer text-center">
                     <a asp-action="Index" class="btn btn-outline-secondary">Yeni Plan Oluştur</a>
@@ -26,3 +30,30 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+       
+        var rawElement = document.getElementById("rawContent");
+        if (rawElement) {
+            var rawText = rawElement.innerText;
+            
+            
+            var htmlContent = marked.parse(rawText);
+            
+ 
+            var resultDiv = document.getElementById("markdownResult");
+            resultDiv.innerHTML = htmlContent;
+
+
+            var tables = resultDiv.getElementsByTagName("table");
+            for(var i=0; i<tables.length; i++) {
+                tables[i].classList.add("table", "table-bordered", "table-striped", "table-hover", "mt-3", "mb-3");
+            }
+            
+
+            var headers = resultDiv.querySelectorAll("h1, h2, h3");
+            headers.forEach(h => h.classList.add("text-primary", "mt-4", "mb-3"));
+        }
+    });
+</script>

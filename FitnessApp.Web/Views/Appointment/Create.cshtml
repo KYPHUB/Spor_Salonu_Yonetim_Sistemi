@@ -12,28 +12,38 @@
                     <h3 class="mb-0">Randevu Oluştur</h3>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-info">
-                        <strong>Hizmet:</strong> @Model.ServiceName (@Model.ServiceDuration dk) - @Model.ServicePrice.ToString("C2")<br />
-                        <strong>Antrenör:</strong> @Model.TrainerName
-                    </div>
-
+                    
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
                         <input type="hidden" asp-for="TrainerId" />
-                        <input type="hidden" asp-for="ServiceId" />
-                        <input type="hidden" asp-for="ServiceDuration" />
                         <input type="hidden" asp-for="TrainerName" />
-                        <input type="hidden" asp-for="ServiceName" />
-                        <input type="hidden" asp-for="ServicePrice" />
+                        <input type="hidden" asp-for="ServiceDuration" id="hiddenDuration" />
+                        <input type="hidden" asp-for="ServicePrice" id="hiddenPrice" />
+                        <input type="hidden" asp-for="ServiceName" id="hiddenName" />
 
                         <div class="mb-3">
-                            <label asp-for="Date" class="form-label">Tarih Seçiniz</label>
+                            <label class="form-label fw-bold">Antrenör</label>
+                            <input type="text" class="form-control" value="@Model.TrainerName" disabled />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ServiceId" class="form-label fw-bold">Hizmet Seçiniz</label>
+                            <select asp-for="ServiceId" class="form-select" asp-items="ViewBag.ServiceList" id="serviceSelect"></select>
+                            
+                            <div class="form-text mt-2" id="serviceInfo" style="font-weight: bold; color: #0d6efd;">
+                                Süre: @Model.ServiceDuration dk | Ücret: @Model.ServicePrice ₺
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Date" class="form-label fw-bold">Tarih Seçiniz</label>
                             <input asp-for="Date" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" id="appointmentDate" />
                             <span asp-validation-for="Date" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="StartTime" class="form-label">Saat Seçiniz</label>
+                            <label asp-for="StartTime" class="form-label fw-bold">Saat Seçiniz</label>
                             <select asp-for="StartTime" class="form-select" id="timeSlots" disabled>
                                 <option value="">Önce tarih seçiniz</option>
                             </select>
@@ -55,22 +65,46 @@
     <script>
         $(document).ready(function () {
             var trainerId = @Model.TrainerId;
-            var duration = @Model.ServiceDuration;
+            
+            
+            var services = @Html.Raw(ViewBag.ServiceDetails);
 
-            $('#appointmentDate').change(function () {
-                var selectedDate = $(this).val();
-                if (selectedDate) {
-                    loadSlots(selectedDate);
+            
+            $('#serviceSelect').change(function() {
+                var selectedId = parseInt($(this).val());
+                var service = services.find(s => s.Id === selectedId);
+
+                if (service) {
+                    
+                    $('#serviceInfo').text('Süre: ' + service.DurationMinutes + ' dk | Ücret: ' + service.Price + ' ₺');
+                    
+                    
+                    $('#hiddenDuration').val(service.DurationMinutes);
+                    $('#hiddenPrice').val(service.Price);
+
+                    
+                    var date = $('#appointmentDate').val();
+                    if (date) loadSlots(date, service.DurationMinutes);
                 }
             });
 
-            // Sayfa yüklendiğinde tarih seçiliyse slotları yükle
+           
+            $('#appointmentDate').change(function () {
+                var selectedDate = $(this).val();
+                var currentDuration = $('#hiddenDuration').val(); 
+                if (selectedDate) {
+                    loadSlots(selectedDate, currentDuration);
+                }
+            });
+
+            
             var initialDate = $('#appointmentDate').val();
+            var initialDuration = $('#hiddenDuration').val();
             if (initialDate) {
-                loadSlots(initialDate);
+                loadSlots(initialDate, initialDuration);
             }
 
-            function loadSlots(date) {
+            function loadSlots(date, duration) {
                 $('#timeSlots').prop('disabled', true).html('<option>Yükleniyor...</option>');
                 
                 $.get('/Appointment/GetAvailableSlots', { trainerId: trainerId, date: date, durationMinutes: duration }, function (data) {
@@ -86,6 +120,7 @@
                 });
             }
 
+        
             $('#timeSlots').change(function() {
                 $('#btnSubmit').prop('disabled', $(this).val() === "");
             });

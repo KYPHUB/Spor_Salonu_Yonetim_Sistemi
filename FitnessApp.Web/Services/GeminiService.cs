@@ -72,15 +72,14 @@ Yanıtı Markdown formatında ver.";
             generationConfig = new
             {
                 temperature = 0.7,
-                maxOutputTokens = 2048
+                maxOutputTokens = 8192
             }
         };
 
         var json = JsonSerializer.Serialize(requestBody);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={_apiKey}";
-        
+        var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={_apiKey}";
         var response = await _httpClient.PostAsync(url, content);
         var responseBody = await response.Content.ReadAsStringAsync();
 

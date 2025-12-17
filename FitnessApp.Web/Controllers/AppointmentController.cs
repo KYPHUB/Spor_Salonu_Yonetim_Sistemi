@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FitnessApp.Web.Data;
 using FitnessApp.Web.Services;
 using FitnessApp.Web.ViewModels;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace FitnessApp.Web.Controllers;
 
@@ -20,30 +22,45 @@ public class AppointmentController : Controller
         _appointmentService = appointmentService;
     }
 
-    // GET: Appointment/Create?trainerId=1&serviceId=2
+    // GET: Appointment/Create?trainerId=1
     public async Task<IActionResult> Create(int? trainerId, int? serviceId)
     {
-        if (trainerId == null || serviceId == null)
+        if (trainerId == null) return RedirectToAction("Index", "Home");
+
+        // Antrenörü ve uzmanlıklarını çekiyoruz
+        var trainer = await _context.Trainers
+            .Include(t => t.Specialties)
+            .FirstOrDefaultAsync(t => t.Id == trainerId);
+
+        if (trainer == null) return NotFound();
+
+        // Eğer antrenörün hiç uzmanlığı yoksa hata mesajı
+        if (trainer.Specialties == null || !trainer.Specialties.Any())
         {
-            // Eğer parametreler yoksa, seçim sayfasına yönlendir (şimdilik ana sayfaya)
-            return RedirectToAction("Index", "Home");
+             return Content("HATA: Bu antrenörün tanımlanmış bir uzmanlık alanı bulunmamaktadır.");
         }
 
-        var trainer = await _context.Trainers.FindAsync(trainerId);
-        var service = await _context.Services.FindAsync(serviceId);
-
-        if (trainer == null || service == null) return NotFound();
+        // Varsayılan seçili hizmeti belirle:
+        // Eğer URL'den serviceId geldiyse ve hoca bunu veriyorsa onu seç, yoksa ilkini seç.
+        var selectedService = trainer.Specialties.FirstOrDefault(s => s.Id == serviceId) 
+                              ?? trainer.Specialties.First();
 
         var model = new AppointmentViewModel
         {
             TrainerId = trainer.Id,
             TrainerName = trainer.FullName,
-            ServiceId = service.Id,
-            ServiceName = service.Name,
-            ServicePrice = service.Price,
-            ServiceDuration = service.DurationMinutes,
-            Date = DateTime.Today.AddDays(1) // Varsayılan olarak yarını seç
+            ServiceId = selectedService.Id, // Başlangıçta seçili olan
+            ServiceName = selectedService.Name,
+            ServicePrice = selectedService.Price,
+            ServiceDuration = selectedService.DurationMinutes,
+            Date = DateTime.Today.AddDays(1)
         };
+
+        // 1. Dropdown için liste (Text: Hizmet Adı, Value: ID)
+        ViewBag.ServiceList = new SelectList(trainer.Specialties, "Id", "Name", selectedService.Id);
+
+        // 2. JavaScript'in fiyat ve süreyi bilmesi için tüm detayları JSON olarak gönderiyoruz
+        ViewBag.ServiceDetails = JsonSerializer.Serialize(trainer.Specialties.Select(s => new { s.Id, s.Price, s.DurationMinutes }));
 
         return View(model);
     }
@@ -59,13 +76,31 @@ public class AppointmentController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(AppointmentViewModel model)
     {
+        // Modelden gelen ServiceId'yi kullanarak fiyat ve süreyi veritabanından tekrar çekmek en güvenlisidir.
+        // Ancak basitlik adına hidden inputlardan gelen veriyi veya tekrar sorguyu kullanabiliriz.
+        // Burada tutarlılık için tekrar veritabanından çekip kontrol ediyoruz (Güvenlik Önlemi).
+        
+        var service = await _context.Services.FindAsync(model.ServiceId);
+        if (service != null)
+        {
+            model.ServiceDuration = service.DurationMinutes; // Süreyi güncelle (JS manipülasyonuna karşı)
+        }
+
         if (ModelState.IsValid)
         {
-            // Tekrar çakışma kontrolü (backend validation)
             var slots = await _appointmentService.GetAvailableSlotsAsync(model.TrainerId, model.Date, model.ServiceDuration);
             if (!slots.Contains(model.StartTime))
             {
                 ModelState.AddModelError("", "Seçilen saat artık müsait değil. Lütfen başka bir saat seçiniz.");
+                
+                // Hata durumunda View'ı tekrar doldurmamız lazım (Dropdownlar boş gelmesin)
+                var trainer = await _context.Trainers.Include(t => t.Specialties).FirstOrDefaultAsync(t => t.Id == model.TrainerId);
+                if (trainer != null)
+                {
+                    ViewBag.ServiceList = new SelectList(trainer.Specialties, "Id", "Name", model.ServiceId);
+                    ViewBag.ServiceDetails = JsonSerializer.Serialize(trainer.Specialties.Select(s => new { s.Id, s.Price, s.DurationMinutes }));
+                }
+                
                 return View(model);
             }
 
@@ -79,7 +114,7 @@ public class AppointmentController : Controller
                 Date = model.Date,
                 StartTime = model.StartTime,
                 EndTime = model.StartTime.Add(TimeSpan.FromMinutes(model.ServiceDuration)),
-                Status = AppointmentStatus.Pending, // Varsayılan: Bekliyor
+                Status = AppointmentStatus.Pending,
                 CreatedAt = DateTime.Now
             };
 
@@ -118,7 +153,6 @@ public class AppointmentController : Controller
 
         if (appointment != null)
         {
-            // Sadece gelecekteki ve iptal edilmemiş randevular iptal edilebilir
             if (appointment.Date >= DateTime.Today && appointment.Status != AppointmentStatus.Cancelled)
             {
                 appointment.Status = AppointmentStatus.Cancelled;
@@ -127,4 +161,4 @@ public class AppointmentController : Controller
         }
         return RedirectToAction(nameof(Index));
     }
-}
+}   
